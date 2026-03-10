@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>যাচাই করা হচ্ছে...</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;700&display=swap');
+        body { font-family: 'Noto Sans Bengali', sans-serif; background-color: #f9fafb; }
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3b82f6;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-5">
+
+    <div class="bg-white p-8 rounded-[30px] shadow-lg w-full max-w-sm text-center border border-gray-100">
+        <div class="flex justify-center mb-6">
+            <div class="loader"></div>
+        </div>
+        
+        <h1 class="text-2xl font-bold text-gray-900 mb-2">যাচাই করা হচ্ছে...</h1>
+        <p class="text-gray-600 leading-relaxed">
+            আনলক করার প্রক্রিয়া চলছে। দয়া করে অপেক্ষা করুন...
+        </p>
+    </div>
+
+    <script>
+        // আপনি চাইলে এখানেও টাইমার সেট করতে পারেন যে কতক্ষণ পর পেজটি রিফ্রেশ হবে
+        // নিচের লাইনটি ঐচ্ছিক, ইউজারকে এই পেজে আটকে রাখতে ব্যবহার করুন
+    </script>
+</body>
+</html>
